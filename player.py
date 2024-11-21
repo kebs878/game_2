@@ -10,10 +10,10 @@ class Player:
       self.color = color
       self.speed = speed
 
-    def draw(self, screen):
+    def draw(self, screen) -> None:
         pygame.draw.rect(screen, self.color, (self.x, self.y, self.width, self.height))
 
-    def move(self):
+    def move(self) -> None:
         keys = pygame.key.get_pressed()
         if keys[pygame.K_LEFT] and self.x > 0:
           self.x -= self.speed
