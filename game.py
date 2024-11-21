@@ -25,6 +25,7 @@ class Game:
                 self.running = False
 
     def run(self) -> None:
+        clock = pygame.time.Clock()
         while self.running == True:
             self.screen.fill(config.WHITE)
             self.player.draw(self.screen)
@@ -34,4 +35,4 @@ class Game:
             self.enemy_3.draw(self.screen)
             self.event_loop()
             pygame.display.flip()
-
+            clock.tick(30)
