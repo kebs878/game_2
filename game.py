@@ -3,6 +3,7 @@ import config
 from player import Player
 from enemy import Enemy
 
+
 class Game:
     def __init__(self) -> None:
         self.screen_width = config.SCREEN_WIDTH
@@ -12,12 +13,17 @@ class Game:
         self.screen = pygame.display.set_mode((self.screen_width, self.screen_height))
         pygame.display.set_caption("GAME 1")
 
-        self.player = Player(config.SCREEN_WIDTH // 2, config.SCREEN_HEIGHT - config.PLAYER_HEIGHT, config.PLAYER_WIDTH, config.PLAYER_HEIGHT, config.LIME, config.PLAYER_SPEED)
+        self.player = Player(
+            config.SCREEN_WIDTH // 2,
+            config.SCREEN_HEIGHT - config.PLAYER_HEIGHT,
+            config.PLAYER_WIDTH,
+            config.PLAYER_HEIGHT,
+            config.LIME,
+            config.PLAYER_SPEED,
+        )
         self.enemy_1 = Enemy(200, 300, 30, 30, config.RED)
         self.enemy_2 = Enemy(600, 400, 30, 30, config.YELLOW)
         self.enemy_3 = Enemy(350, 250, 30, 30, config.BLACK)
-
-
 
     def event_loop(self) -> None:
         for event in pygame.event.get():
@@ -26,7 +32,7 @@ class Game:
 
     def run(self) -> None:
         clock = pygame.time.Clock()
-        while self.running == True:
+        while self.running:
             self.screen.fill(config.WHITE)
             self.player.draw(self.screen)
             self.player.move()
