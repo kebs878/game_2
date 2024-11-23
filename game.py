@@ -21,14 +21,21 @@ class Game:
             config.LIME,
             config.PLAYER_SPEED,
         )
-        self.enemy_1 = Enemy(200, 300, 30, 30, config.RED)
-        self.enemy_2 = Enemy(600, 400, 30, 30, config.YELLOW)
-        self.enemy_3 = Enemy(350, 250, 30, 30, config.BLACK)
+        self.enemy_1 = Enemy(200, 100, 30, 30, config.RED)
+        self.enemy_2 = Enemy(600, 50, 30, 30, config.YELLOW)
+        self.enemy_3 = Enemy(350, 75, 30, 30, config.BLACK)
 
     def event_loop(self) -> None:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.running = False
+
+    def move_bullets(self) -> None:
+        for bullet in self.player.shots:
+            bullet.draw(self.screen)
+            bullet.move()
+            if bullet.y < 0:
+                self.player.shots.remove(bullet)
 
     def run(self) -> None:
         clock = pygame.time.Clock()
@@ -36,6 +43,8 @@ class Game:
             self.screen.fill(config.WHITE)
             self.player.draw(self.screen)
             self.player.move()
+            self.player.bullets_clock()
+            self.move_bullets()
             self.enemy_1.draw(self.screen)
             self.enemy_2.draw(self.screen)
             self.enemy_3.draw(self.screen)
