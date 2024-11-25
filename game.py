@@ -28,6 +28,7 @@ class Game:
         )
 
     def reset_game(self):
+        self.lives = 6
         self.game_over = False
         self.enemy_1 = Enemy(200, 100, 30, 30, config.RED)
         self.enemy_2 = Enemy(600, 50, 30, 30, config.YELLOW)
@@ -61,7 +62,9 @@ class Game:
                     print(self.enemy_1)
                     self.player.shots.remove(bullet)
                 if self.enemies == []:
-                    self.game_over = True
+                    self.game_over == True
+                    self.draw_won()
+
         for enemy in self.enemies:
             for bullet in enemy.shots:
                 if self.player.get_rect().colliderect(bullet.get_rect()):
@@ -69,10 +72,15 @@ class Game:
                     self.player.lives -= 1
                     if self.player.lives == 0:
                         self.game_over = True
+                        self.draw_lost()
 
-                    
-                    
+    def draw_lost(self):
+        lost_text = self.font.render("YOU LOST", True, config.RED)
+        self.screen.blit(lost_text, (300, 225))               
 
+    def draw_won(self):
+        won_text = self.font.render("YOU WON", True, config.RED)
+        self.screen.blit(won_text, (300, 225))
 
     def draw_lives(self):
         live_text = self.font.render(f"LIVES: {str(self.player.lives)}", True, config.BLUE)
