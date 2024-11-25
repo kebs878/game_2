@@ -15,3 +15,6 @@ class Bullets:
 
     def move(self) -> None:
         self.y -= self.speed
+
+    def get_rect(self):
+      return pygame.Rect(self.x, self.y, self.width, self.height)
