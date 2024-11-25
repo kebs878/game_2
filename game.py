@@ -62,6 +62,17 @@ class Game:
                     self.player.shots.remove(bullet)
                 if self.enemies == []:
                     self.game_over = True
+        for enemy in self.enemies:
+            for bullet in enemy.shots:
+                if self.player.get_rect().colliderect(bullet.get_rect()):
+                    enemy.shots.remove(bullet)
+                    self.player.lives -= 1
+                    if self.player.lives == 0:
+                        self.game_over = True
+
+                    
+                    
+
 
     def draw_lives(self):
         live_text = self.font.render(f"LIVES: {str(self.player.lives)}", True, config.BLUE)
