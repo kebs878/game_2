@@ -48,6 +48,10 @@ class Game:
             bullet.move()
             if bullet.y < 0:
                 self.player.shots.remove(bullet)
+        for enemy in self.enemies:
+            for bullet in enemy.shots:
+                bullet.draw(self.screen)
+                bullet.move(2)
 
     def handle_collision(self) -> None:
         for enemy in self.enemies:
@@ -79,6 +83,7 @@ class Game:
                 self.move_bullets()
                 for enemy in self.enemies:
                     enemy.draw(self.screen)
+                    enemy.bullets_clock()
                 self.handle_collision()
                 self.draw_lives()
             else:
