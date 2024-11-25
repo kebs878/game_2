@@ -5,4 +5,3 @@ pygame.init()
 
 game = Game()
 game.run()
- 
