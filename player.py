@@ -21,6 +21,7 @@ class Player:
         self.speed = speed
         self.shots = []
         self.timer = 0
+        self.lives = 6
 
     def draw(self, screen) -> None:
         pygame.draw.rect(screen, self.color, (self.x, self.y, self.width, self.height))

@@ -59,6 +59,14 @@ class Game:
                 if self.enemies == []:
                     self.game_over = True
 
+    def draw_lives(self):
+        live_text = self.font.render(f"LIVES: {str(self.player.lives)}", True, config.BLUE)
+        self.screen.blit(live_text, (10, 10))
+
+    def draw_game_over(self):
+        game_over_text = self.font.render("THE GAME IS OVER ", True, config.RED)
+        self.screen.blit(game_over_text, (300, 225))
+
     def run(self) -> None:
         clock = pygame.time.Clock()
         while self.running:
@@ -72,8 +80,9 @@ class Game:
                 for enemy in self.enemies:
                     enemy.draw(self.screen)
                 self.handle_collision()
+                self.draw_lives()
             else:
-                game_over_text = self.font.render("THE GAME IS OVER ", True, config.RED)
-                self.screen.blit(game_over_text, (300, 225))
+                self.draw_game_over()
+                
             pygame.display.flip()
             clock.tick(30)
