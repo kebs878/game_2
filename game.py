@@ -8,7 +8,9 @@ class Game:
     def __init__(self) -> None:
         self.screen_width = config.SCREEN_WIDTH
         self.screen_height = config.SCREEN_HEIGHT
+        self.font = pygame.font.Font(None, config.FONT_SIZE)
         self.running = True
+        self.game_over = False
 
         self.enemy_1 = Enemy(200, 100, 30, 30, config.RED)
         self.enemy_2 = Enemy(600, 50, 30, 30, config.YELLOW)
@@ -45,20 +47,25 @@ class Game:
                 if enemy.get_rect().colliderect(bullet.get_rect()):
                     self.enemies.remove(enemy)
                     self.player.shots.remove(bullet)
+                if self.enemies == []:
+                    self.game_over = True
 
 
     def run(self) -> None:
         clock = pygame.time.Clock()
         while self.running:
-            self.screen.fill(config.WHITE)
-            self.player.draw(self.screen)
-            self.player.move()
-            self.player.bullets_clock()
-            self.move_bullets()
-            self.enemy_1.draw(self.screen)
-            self.enemy_2.draw(self.screen)
-            self.enemy_3.draw(self.screen)
-            self.handle_collision()
             self.event_loop()
+            self.screen.fill(config.WHITE)
+            if self.game_over == False:
+                self.player.draw(self.screen)
+                self.player.move()
+                self.player.bullets_clock()
+                self.move_bullets()
+                for enemy in self.enemies:
+                    enemy.draw(self.screen)
+                self.handle_collision()
+            else:
+                game_over_text = self.font.render("THE GAME IS OVER ", True, config.RED)
+                self.screen.blit(game_over_text, (300, 225))
             pygame.display.flip()
             clock.tick(30)
