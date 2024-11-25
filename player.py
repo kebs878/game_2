@@ -4,7 +4,15 @@ from bullets import Bullets
 
 
 class Player:
-    def __init__(self, x, y, width, height, color, speed) -> None:
+    def __init__(
+        self,
+        x,
+        y,
+        width=config.PLAYER_WIDTH,
+        height=config.PLAYER_HEIGHT,
+        color=config.LIME,
+        speed=config.PLAYER_SPEED,
+    ) -> None:
         self.x = x
         self.y = y
         self.width = width
@@ -36,9 +44,5 @@ class Player:
             bullet = Bullets(
                 self.x,
                 self.y,
-                config.BULLETS_WIDTH,
-                config.BULLETS_HEIGHT,
-                config.RED,
-                config.BULLETS_SPEED,
             )
             self.shots.append(bullet)

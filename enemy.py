@@ -13,4 +13,4 @@ class Enemy:
         pygame.draw.rect(screen, self.color, (self.x, self.y, self.width, self.height))
 
     def get_rect(self):
-      return pygame.Rect(self.x, self.y, self.width, self.height)
+        return pygame.Rect(self.x, self.y, self.width, self.height)

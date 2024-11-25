@@ -17,7 +17,7 @@ class Game:
         self.enemy_1 = Enemy(200, 100, 30, 30, config.RED)
         self.enemy_2 = Enemy(600, 50, 30, 30, config.YELLOW)
         self.enemy_3 = Enemy(350, 75, 30, 30, config.BLACK)
-        self.enemies = [self.enemy_1 , self.enemy_2, self.enemy_3]
+        self.enemies = [self.enemy_1, self.enemy_2, self.enemy_3]
 
         self.screen = pygame.display.set_mode((self.screen_width, self.screen_height))
         pygame.display.set_caption("GAME 1")
@@ -25,10 +25,6 @@ class Game:
         self.player = Player(
             config.SCREEN_WIDTH // 2,
             config.SCREEN_HEIGHT - config.PLAYER_HEIGHT,
-            config.PLAYER_WIDTH,
-            config.PLAYER_HEIGHT,
-            config.LIME,
-            config.PLAYER_SPEED,
         )
 
     def reset_game(self):
@@ -36,7 +32,7 @@ class Game:
         self.enemy_1 = Enemy(200, 100, 30, 30, config.RED)
         self.enemy_2 = Enemy(600, 50, 30, 30, config.YELLOW)
         self.enemy_3 = Enemy(350, 75, 30, 30, config.BLACK)
-        self.enemies = [self.enemy_1 , self.enemy_2, self.enemy_3]
+        self.enemies = [self.enemy_1, self.enemy_2, self.enemy_3]
 
     def event_loop(self) -> None:
         for event in pygame.event.get():
@@ -62,7 +58,6 @@ class Game:
                     self.player.shots.remove(bullet)
                 if self.enemies == []:
                     self.game_over = True
-
 
     def run(self) -> None:
         clock = pygame.time.Clock()
