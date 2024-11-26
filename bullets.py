@@ -22,7 +22,7 @@ class Bullets:
     def draw(self, screen) -> None:
         pygame.draw.rect(screen, self.color, (self.x, self.y, self.width, self.height))
 
-    def move(self, type = 1) -> None:
+    def move(self, type=1) -> None:
         if type == 1:
             self.y -= self.speed
         if type == 2:
