@@ -93,6 +93,7 @@ class Game:
                 self.move_bullets()
                 for enemy in self.enemies:
                     enemy.draw(self.screen)
+                    enemy.move()
                     enemy.bullets_clock()
                 self.handle_collision()
                 self.draw_lives()
