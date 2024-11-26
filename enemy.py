@@ -22,12 +22,12 @@ class Enemy:
     def bullets_clock(self):
         self.timer += random.randint(1, 10)
         if self.timer > 120:
-            self.shot() 
+            self.shot()
 
     def shot(self) -> None:
         self.timer = 0
         bullet = Bullets(
-                self.x,
-                self.y,
-            )
+            self.x,
+            self.y,
+        )
         self.shots.append(bullet)
