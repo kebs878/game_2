@@ -1,9 +1,10 @@
 import pygame
 import config
 from bullets import Bullets
+from game_object import GameObject
 
 
-class Player:
+class Player(GameObject):
     def __init__(
         self,
         x,
@@ -13,18 +14,11 @@ class Player:
         color=config.LIME,
         speed=config.PLAYER_SPEED,
     ) -> None:
-        self.x = x
-        self.y = y
-        self.width = width
-        self.height = height
-        self.color = color
+        super().__init__(x, y, width, height, color)
         self.speed = speed
         self.shots = []
         self.timer = 0
         self.lives = 6
-
-    def draw(self, screen) -> None:
-        pygame.draw.rect(screen, self.color, (self.x, self.y, self.width, self.height))
 
     def move(self) -> None:
         keys = pygame.key.get_pressed()
@@ -48,5 +42,3 @@ class Player:
             )
             self.shots.append(bullet)
 
-    def get_rect(self):
-        return pygame.Rect(self.x, self.y, self.width, self.height)
