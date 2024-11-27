@@ -27,6 +27,7 @@ class Game:
         enemy_3 = Enemy(350, 75, config.BLACK)
         self.enemies = [enemy_1, enemy_2, enemy_3]
         self.timer_enemy = 0
+        self.killed_enemies = 0
 
     def spawn_enemy(self) -> None:
         self.timer_enemy += 1
@@ -65,6 +66,7 @@ class Game:
                 if enemy.get_rect().colliderect(bullet.get_rect()):
                     self.enemies.remove(enemy)
                     self.player.shots.remove(bullet)
+                    self.killed_enemies += 1
                     if self.enemies == []:
                         self.game_over = True
 
@@ -78,8 +80,8 @@ class Game:
 
 
     def draw_lost(self):
-        lost_text = self.font.render("YOU LOST", True, config.RED)
-        self.screen.blit(lost_text, (300, 225))
+        lost_text = self.font.render(f"YOU LOST-> KILLED {self.killed_enemies} ENEMIES", True, config.RED)
+        self.screen.blit(lost_text, (200, 225))
 
     def draw_won(self):
         won_text = self.font.render("YOU WON", True, config.RED)
