@@ -28,6 +28,7 @@ class Enemy(GameObject):
         self.shots.append(bullet)
 
     def move(self) -> None:
+        self.change_direction()
         if self.direction == "left":
             self.x -= self.speed
             if self.x < 0:
@@ -37,3 +38,11 @@ class Enemy(GameObject):
             self.x += self.speed
             if self.x > config.SCREEN_WIDTH - config.ENEMY_WIDTH:
                 self.direction = "left"
+
+    def change_direction(self) -> None:
+        random_number = random.randint(0, 100)
+        if random_number > 95:
+            if self.direction == "right":
+                self.direction = "left"
+            else:
+                self.direction = "right"
