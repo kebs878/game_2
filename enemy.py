@@ -3,10 +3,13 @@ from bullets import Bullets
 import random
 import config
 
+
 class Enemy(GameObject):
-    def __init__(self, x, y, width, height, color) -> None:
+    def __init__(
+        self, x: int, y: int, width: int, height: int, color: tuple[int, int, int]
+    ) -> None:
         super().__init__(x, y, width, height, color)
-        self.shots = []
+        self.shots: list[Bullets] = []
         self.timer = 0
         self.speed = config.ENEMY_SPEED
         self.direction = "left"
@@ -25,15 +28,12 @@ class Enemy(GameObject):
         self.shots.append(bullet)
 
     def move(self) -> None:
-        if self.direction == 'left':
+        if self.direction == "left":
             self.x -= self.speed
             if self.x < 0:
-                self.direction = 'right'
-        
+                self.direction = "right"
+
         if self.direction == "right":
             self.x += self.speed
             if self.x > config.SCREEN_WIDTH - config.ENEMY_WIDTH:
-                self.direction = 'left'
-
-        
-
+                self.direction = "left"

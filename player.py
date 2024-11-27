@@ -7,16 +7,16 @@ from game_object import GameObject
 class Player(GameObject):
     def __init__(
         self,
-        x,
-        y,
-        width=config.PLAYER_WIDTH,
-        height=config.PLAYER_HEIGHT,
-        color=config.LIME,
-        speed=config.PLAYER_SPEED,
+        x: int,
+        y: int,
+        width: int = config.PLAYER_WIDTH,
+        height: int = config.PLAYER_HEIGHT,
+        color: tuple[int, int, int] = config.LIME,
+        speed: int = config.PLAYER_SPEED,
     ) -> None:
         super().__init__(x, y, width, height, color)
         self.speed = speed
-        self.shots = []
+        self.shots: list[Bullets] = []
         self.timer = 0
         self.lives = 6
 
@@ -41,4 +41,3 @@ class Player(GameObject):
                 self.y,
             )
             self.shots.append(bullet)
-
