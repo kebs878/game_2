@@ -2,6 +2,7 @@ import pygame
 import config
 from player import Player
 from enemy import Enemy
+import random
 
 
 class Game:
@@ -21,10 +22,23 @@ class Game:
             config.SCREEN_HEIGHT - config.PLAYER_HEIGHT,
         )
         self.player.lives = 6
-        self.enemy_1 = Enemy(200, 100, 30, 30, config.RED)
-        self.enemy_2 = Enemy(600, 50, 30, 30, config.YELLOW)
-        self.enemy_3 = Enemy(350, 75, 30, 30, config.BLACK)
-        self.enemies = [self.enemy_1, self.enemy_2, self.enemy_3]
+        enemy_1 = Enemy(200, 100, config.RED)
+        enemy_2 = Enemy(600, 50, config.YELLOW)
+        enemy_3 = Enemy(350, 75, config.BLACK)
+        self.enemies = [enemy_1, enemy_2, enemy_3]
+        self.timer_enemy = 0
+
+    def spawn_enemy(self) -> None:
+        self.timer_enemy += 1
+        if self.timer_enemy > 150 :
+            self.timer_enemy = 0
+            x = random.randint(0,config.SCREEN_WIDTH - config.ENEMY_WIDTH)
+            y = random.randint(0, config.SCREEN_HEIGHT - 5 * config.ENEMY_HEIGHT)
+            color = (random.randint(0, 255), random.randint(0, 255),random.randint(0, 255))
+            enemy = Enemy(x, y, color)
+            self.enemies.append(enemy)
+            
+
 
     def event_loop(self) -> None:
         for event in pygame.event.get():
@@ -50,7 +64,6 @@ class Game:
             for bullet in self.player.shots:
                 if enemy.get_rect().colliderect(bullet.get_rect()):
                     self.enemies.remove(enemy)
-                    print(self.enemy_1)
                     self.player.shots.remove(bullet)
                     if self.enemies == []:
                         self.game_over = True
@@ -62,6 +75,7 @@ class Game:
                     self.player.lives -= 1
                     if self.player.lives == 0:
                         self.game_over = True
+
 
     def draw_lost(self):
         lost_text = self.font.render("YOU LOST", True, config.RED)
@@ -96,6 +110,7 @@ class Game:
                     enemy.move()
                     enemy.bullets_clock()
                 self.handle_collision()
+                self.spawn_enemy()
                 self.draw_lives()
             else:
                 if self.enemies == []:
