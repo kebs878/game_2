@@ -3,6 +3,7 @@ import config
 from player import Player
 from enemy import Enemy
 import random
+from enums import GameState
 
 
 class Game:
@@ -16,7 +17,6 @@ class Game:
         self.reset_game()
 
     def reset_game(self):
-        self.game_over = False
         self.player = Player(
             config.SCREEN_WIDTH // 2,
             config.SCREEN_HEIGHT - config.PLAYER_HEIGHT,
@@ -28,24 +28,27 @@ class Game:
         self.enemies = [enemy_1, enemy_2, enemy_3]
         self.timer_enemy = 0
         self.killed_enemies = 0
+        self.state = GameState.MENU
 
     def spawn_enemy(self) -> None:
         self.timer_enemy += 1
-        if self.timer_enemy > 150 :
+        if self.timer_enemy > 150:
             self.timer_enemy = 0
-            x = random.randint(0,config.SCREEN_WIDTH - config.ENEMY_WIDTH)
+            x = random.randint(0, config.SCREEN_WIDTH - config.ENEMY_WIDTH)
             y = random.randint(0, config.SCREEN_HEIGHT - 5 * config.ENEMY_HEIGHT)
-            color = (random.randint(0, 255), random.randint(0, 255),random.randint(0, 255))
+            color = (
+                random.randint(0, 255),
+                random.randint(0, 255),
+                random.randint(0, 255),
+            )
             enemy = Enemy(x, y, color)
             self.enemies.append(enemy)
-            
-
 
     def event_loop(self) -> None:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.running = False
-            if self.game_over and event.type == pygame.KEYDOWN:
+            if self.state == GameState.GAME_OVER and event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_r:
                     self.reset_game()
 
@@ -68,7 +71,7 @@ class Game:
                     self.player.shots.remove(bullet)
                     self.killed_enemies += 1
                     if self.enemies == []:
-                        self.game_over = True
+                        self.state = GameState.GAME_OVER
 
         for enemy in self.enemies:
             for bullet in enemy.shots:
@@ -76,11 +79,12 @@ class Game:
                     enemy.shots.remove(bullet)
                     self.player.lives -= 1
                     if self.player.lives == 0:
-                        self.game_over = True
-
+                        self.state = GameState.GAME_OVER
 
     def draw_lost(self):
-        lost_text = self.font.render(f"YOU LOST-> KILLED {self.killed_enemies} ENEMIES", True, config.RED)
+        lost_text = self.font.render(
+            f"YOU LOST-> KILLED {self.killed_enemies} ENEMIES", True, config.RED
+        )
         self.screen.blit(lost_text, (200, 225))
 
     def draw_won(self):
@@ -94,31 +98,42 @@ class Game:
         self.screen.blit(live_text, (10, 10))
 
     def draw_game_over(self):
-        game_over_text = self.font.render("THE GAME IS OVER ", True, config.RED)
-        self.screen.blit(game_over_text, (300, 225))
+        if self.enemies == []:
+            self.draw_won()
+        if self.player.lives == 0:
+            self.draw_lost()
+
+    def play_game(self):
+        self.player.draw(self.screen)
+        self.player.move()
+        self.player.bullets_clock()
+        self.move_bullets()
+        for enemy in self.enemies:
+            enemy.draw(self.screen)
+            enemy.move()
+            enemy.bullets_clock()
+        self.handle_collision()
+        self.spawn_enemy()
+        self.draw_lives()
+
+    def menu(self):
+        menu_text = self.font.render("Select difficulty. 1.Easy 2.Medium 3.Hard", True, config.RED)
+        self.screen.blit(menu_text, (100, 225))
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_1]:
+            self.state = GameState.ACTIV_GAME
 
     def run(self) -> None:
         clock = pygame.time.Clock()
         while self.running:
             self.event_loop()
             self.screen.fill(config.WHITE)
-            if not self.game_over:
-                self.player.draw(self.screen)
-                self.player.move()
-                self.player.bullets_clock()
-                self.move_bullets()
-                for enemy in self.enemies:
-                    enemy.draw(self.screen)
-                    enemy.move()
-                    enemy.bullets_clock()
-                self.handle_collision()
-                self.spawn_enemy()
-                self.draw_lives()
-            else:
-                if self.enemies == []:
-                    self.draw_won()
-                if self.player.lives == 0:
-                    self.draw_lost()
-
+            if self.state == GameState.MENU:
+                self.menu()
+            elif self.state == GameState.GAME_OVER:
+                self.draw_game_over()
+            elif self.state == GameState.ACTIV_GAME:
+                self.play_game()
+    
             pygame.display.flip()
             clock.tick(30)

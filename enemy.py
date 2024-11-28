@@ -6,7 +6,12 @@ import config
 
 class Enemy(GameObject):
     def __init__(
-        self, x: int, y: int, color: tuple[int, int, int], width: int = config.ENEMY_WIDTH, height: int = config.ENEMY_HEIGHT
+        self,
+        x: int,
+        y: int,
+        color: tuple[int, int, int],
+        width: int = config.ENEMY_WIDTH,
+        height: int = config.ENEMY_HEIGHT,
     ) -> None:
         super().__init__(x, y, width, height, color)
         self.shots: list[Bullets] = []
