@@ -10,13 +10,14 @@ class Enemy(GameObject):
         x: int,
         y: int,
         color: tuple[int, int, int],
+        speed: int = config.ENEMY_SPEED,
         width: int = config.ENEMY_WIDTH,
         height: int = config.ENEMY_HEIGHT,
     ) -> None:
         super().__init__(x, y, width, height, color)
         self.shots: list[Bullets] = []
         self.timer = 0
-        self.speed = config.ENEMY_SPEED
+        self.speed = speed
         self.direction = "left"
 
     def bullets_clock(self):

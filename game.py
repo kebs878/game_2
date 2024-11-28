@@ -3,7 +3,7 @@ import config
 from player import Player
 from enemy import Enemy
 import random
-from enums import GameState
+from enums import GameState, GameDifficulty
 
 
 class Game:
@@ -14,21 +14,31 @@ class Game:
         self.running = True
         self.screen = pygame.display.set_mode((self.screen_width, self.screen_height))
         pygame.display.set_caption("GAME 1")
-        self.reset_game()
+        self.state = GameState.MENU
 
-    def reset_game(self):
+    def reset_game(self, difficulty: GameDifficulty):
+        self.state = GameState.ACTIV_GAME
         self.player = Player(
             config.SCREEN_WIDTH // 2,
             config.SCREEN_HEIGHT - config.PLAYER_HEIGHT,
         )
-        self.player.lives = 6
-        enemy_1 = Enemy(200, 100, config.RED)
-        enemy_2 = Enemy(600, 50, config.YELLOW)
-        enemy_3 = Enemy(350, 75, config.BLACK)
+        if difficulty == GameDifficulty.EASY:
+            lives = 6
+            enemy_speed = config.ENEMY_SPEED
+        elif difficulty == GameDifficulty.MEDIUM:
+            lives = 4
+            enemy_speed = config.ENEMY_SPEED * 2
+        elif difficulty == GameDifficulty.HARD:
+            lives = 2
+            enemy_speed = config.ENEMY_SPEED * 4
+
+        self.player.lives = lives
+        enemy_1 = Enemy(200, 100, config.RED, enemy_speed)
+        enemy_2 = Enemy(600, 50, config.YELLOW, enemy_speed)
+        enemy_3 = Enemy(350, 75, config.BLACK, enemy_speed)
         self.enemies = [enemy_1, enemy_2, enemy_3]
         self.timer_enemy = 0
         self.killed_enemies = 0
-        self.state = GameState.MENU
 
     def spawn_enemy(self) -> None:
         self.timer_enemy += 1
@@ -50,7 +60,7 @@ class Game:
                 self.running = False
             if self.state == GameState.GAME_OVER and event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_r:
-                    self.reset_game()
+                    self.state = GameState.MENU
 
     def move_bullets(self) -> None:
         for bullet in self.player.shots:
@@ -121,7 +131,11 @@ class Game:
         self.screen.blit(menu_text, (100, 225))
         keys = pygame.key.get_pressed()
         if keys[pygame.K_1]:
-            self.state = GameState.ACTIV_GAME
+            self.reset_game(GameDifficulty.EASY)
+        if keys[pygame.K_2]:
+            self.reset_game(GameDifficulty.MEDIUM)
+        if keys[pygame.K_3]:
+            self.reset_game(GameDifficulty.HARD)
 
     def run(self) -> None:
         clock = pygame.time.Clock()
